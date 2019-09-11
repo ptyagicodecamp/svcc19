@@ -1,4 +1,5 @@
 [
+
     {
         "family": "Indie Flower",
         "fonts": [
@@ -22,5 +23,13 @@
             }
         ],
         "family": "MaterialIcons"
+    },
+    {
+        "family": "Cookie-Regular",
+        "fonts": [
+            {
+                "asset": "fonts/Cookie-Regular.ttf"
+            }
+        ]
     }
 ]
