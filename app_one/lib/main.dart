@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 'You have pushed the button this many times:',
-                style: TextStyle(fontFamily: 'Cookie-Regular', fontSize: 60),
+                style: TextStyle(fontFamily: 'Cookie', fontSize: 60),
               ),
             ),
             Text(
