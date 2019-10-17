@@ -1,3 +1,5 @@
+import 'package:app_one/plugins/url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -9,59 +11,110 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.yellow,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: SwitchListTile1(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class SwitchListTile1 extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<StatefulWidget> createState() {
+    return _SwitchListTileState();
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class _SwitchListTileState extends State<SwitchListTile1> {
+  bool accepted = false;
+  String privacyLabel = 'Privacy Policy';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'You have pushed the button this many times:',
-                // style: TextStyle(fontFamily: 'Cookie', fontSize: 60),
-              ),
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+        title: Text(
+          "SwitchListTile: Clickable label",
+//          style: TextStyle(
+//            fontFamily: 'Cookie',
+//            fontSize: 40.0,
+//          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+      body: Column(
+        children: <Widget>[
+          HyperlinkedLabelSwitch(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
+            label: privacyLabel,
+            hyperlink:
+                'https://docs.google.com/document/d/1TAqTE7MBzuIagISHHzjGxSHoY1z884LXR3iGIojz1sA/edit?usp=sharing',
+            selected: accepted,
+            onChange: (bool v) {
+              setState(() {
+                accepted = v;
+                if (accepted) {
+                  privacyLabel = 'Privacy Policy (Accepted)';
+                } else {
+                  privacyLabel = 'Privacy Policy';
+                }
+              });
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class HyperlinkedLabelSwitch extends StatelessWidget {
+  final String label;
+  final String hyperlink;
+  final bool selected;
+  final Function onChange;
+  final EdgeInsets padding;
+
+  const HyperlinkedLabelSwitch(
+      {Key key,
+      this.label,
+      this.selected,
+      this.onChange,
+      this.padding,
+      this.hyperlink});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: <Widget>[
+            //1. First widget in row is for label
+            //Expanded widget claims the empty area
+            Expanded(
+              child: RichText(
+                  text: TextSpan(
+                      text: label,
+                      style: TextStyle(
+                          color: Colors.redAccent,
+                          decoration: TextDecoration.underline,
+                          fontSize: 20.0),
+                      //TapGestureRecognizer helps to disambiguate gestures from other potential gestures
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          UrlUtils.open(this.hyperlink);
+                        })),
+            ),
+
+            //2. Next comes the switch to save the user's selection
+            Switch(
+              value: selected,
+              onChanged: (bool v) {
+                onChange(v);
+              },
+            )
+          ],
+        ),
       ),
     );
   }
